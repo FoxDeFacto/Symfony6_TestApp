@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20231011164956 extends AbstractMigration
+final class Version20231011173604 extends AbstractMigration
 {
     public function getDescription(): string
     {
@@ -20,10 +20,8 @@ final class Version20231011164956 extends AbstractMigration
     public function up(Schema $schema): void
     {
         // this up() migration is auto-generated, please modify it to your needs
-        $this->addSql('CREATE SEQUENCE product_id_seq INCREMENT BY 1 MINVALUE 1 START 1');
-        $this->addSql('CREATE SEQUENCE product_type_id_seq INCREMENT BY 1 MINVALUE 1 START 1');
-        $this->addSql('CREATE TABLE product (id INT NOT NULL, type INT DEFAULT NULL, name VARCHAR(50) NOT NULL, PRIMARY KEY(id))');
-        $this->addSql('CREATE INDEX IDX_D34A04AD8CDE5729 ON product (type)');
+        $this->addSql('CREATE TABLE product (id INT NOT NULL, name VARCHAR(50) NOT NULL, ProductType_id INT DEFAULT NULL, PRIMARY KEY(id))');
+        $this->addSql('CREATE INDEX IDX_D34A04AD5CDA6BF0 ON product (ProductType_id)');
         $this->addSql('CREATE TABLE product_type (id INT NOT NULL, name VARCHAR(50) NOT NULL, PRIMARY KEY(id))');
         $this->addSql('CREATE TABLE messenger_messages (id BIGSERIAL NOT NULL, body TEXT NOT NULL, headers TEXT NOT NULL, queue_name VARCHAR(190) NOT NULL, created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, available_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, delivered_at TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL, PRIMARY KEY(id))');
         $this->addSql('CREATE INDEX IDX_75EA56E0FB7336F0 ON messenger_messages (queue_name)');
@@ -40,16 +38,14 @@ final class Version20231011164956 extends AbstractMigration
         $$ LANGUAGE plpgsql;');
         $this->addSql('DROP TRIGGER IF EXISTS notify_trigger ON messenger_messages;');
         $this->addSql('CREATE TRIGGER notify_trigger AFTER INSERT OR UPDATE ON messenger_messages FOR EACH ROW EXECUTE PROCEDURE notify_messenger_messages();');
-        $this->addSql('ALTER TABLE product ADD CONSTRAINT FK_D34A04AD8CDE5729 FOREIGN KEY (type) REFERENCES product_type (id) NOT DEFERRABLE INITIALLY IMMEDIATE');
+        $this->addSql('ALTER TABLE product ADD CONSTRAINT FK_D34A04AD5CDA6BF0 FOREIGN KEY (ProductType_id) REFERENCES product_type (id) NOT DEFERRABLE INITIALLY IMMEDIATE');
     }
 
     public function down(Schema $schema): void
     {
         // this down() migration is auto-generated, please modify it to your needs
         $this->addSql('CREATE SCHEMA public');
-        $this->addSql('DROP SEQUENCE product_id_seq CASCADE');
-        $this->addSql('DROP SEQUENCE product_type_id_seq CASCADE');
-        $this->addSql('ALTER TABLE product DROP CONSTRAINT FK_D34A04AD8CDE5729');
+        $this->addSql('ALTER TABLE product DROP CONSTRAINT FK_D34A04AD5CDA6BF0');
         $this->addSql('DROP TABLE product');
         $this->addSql('DROP TABLE product_type');
         $this->addSql('DROP TABLE messenger_messages');

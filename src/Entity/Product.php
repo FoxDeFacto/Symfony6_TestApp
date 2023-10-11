@@ -17,8 +17,8 @@ class Product
     private ?string $name = null;
 
     #[ORM\ManyToOne(targetEntity: ProductType::class)] //Každý produkt má jeden typ
-    #[ORM\JoinColumn(name: "type", referencedColumnName: "id")]
-    private ?ProductType $type = null;
+    #[ORM\JoinColumn(name: "ProductType_id", referencedColumnName: "id")] //Název pod kterým se to vytvoří v databázi a sloupec pod který se to bude hledat v druhé tabulce
+    private ?ProductType $ProductType = null;
 
     public function getId(): ?int
     {
@@ -39,12 +39,12 @@ class Product
 
     public function getType(): ?ProductType
     {
-        return $this->type;
+        return $this->ProductType;
     }
 
-    public function setType(ProductType $type): static
+    public function setType(ProductType $ProductType): static
     {
-        $this->type = $type;
+        $this->ProductType = $ProductType;
 
         return $this;
     }
