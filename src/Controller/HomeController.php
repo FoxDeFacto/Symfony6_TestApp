@@ -8,6 +8,8 @@ use Symfony\Component\Routing\Annotation\Route;
 use Doctrine\Persistence\ManagerRegistry; //Přidáno pro manipulaci s entitami
 use App\Entity\Product; //Přidáno pro práci s entitou "Product"
 use App\Entity\ProductType; //Přidáno pro práci s entitou "ProductType"
+use App\Form\ProductFormType; //Přidá definici formuláře pro entitu "Product" 
+use Symfony\Component\HttpFoundation\Request; //Přidáno pro zpracování dat po provedení odeslání
 
 class HomeController extends AbstractController
 {
@@ -22,7 +24,7 @@ class HomeController extends AbstractController
 
          foreach ($products as $product) // Spojí ProductType s Product na základě cizího klíče v Product
          {
-            $type = $product->getType();
+            $type = $product->getProductType();
             foreach ($productTypes as $productType) 
             {
                 /*
@@ -32,11 +34,12 @@ class HomeController extends AbstractController
                 die();*/
                 if ($type->getId() == $productType->getId()) 
                 {
-                    $product->setType($productType);
+                    $product->setProductType($productType);
                     break;
                 }
             }
         }
+        
         return $this->render('home/index.html.twig', [
             'controller_name' => 'HomeController',
             'products' => $products
@@ -51,4 +54,36 @@ class HomeController extends AbstractController
             'variable_test' => 'Value_test', //Název proměné a její hodnota
         ]);
     }
+
+    #[Route('/product/new', name: 'product_new')] //cesta 
+    public function new(Request $request,ManagerRegistry $doctrine): Response
+    {
+
+        $product = new Product(); //Tvorba nového objektu typu Product
+
+ 
+        $form = $this->createForm(ProductFormType::class, $product); //Tvorba nového formuléře podle vzoru ProductFormType
+
+
+        $form->handleRequest($request); //Předání dat z formuláře
+
+
+        if ($form->isSubmitted() && $form->isValid()) // Kontrola validity a odeslání
+        {
+ 
+            $product = $form->getData();
+
+            $em = $doctrine->getManager();
+
+            $em->persist($product);
+            $em->flush(); //Přidání data do databáze
+
+            return $this->redirect('/'); //Přesměrování na Homepage
+        }
+
+        return $this->render('home/product_new.html.twig', [ //Stránka s daným formulářem
+            'form' => $form->createView(),
+        ]);
+    }
+
 }
