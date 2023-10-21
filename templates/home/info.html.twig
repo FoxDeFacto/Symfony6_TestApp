@@ -11,6 +11,6 @@
 <div class="example-wrapper primary">
     <h1>Hello {{ controller_name }}! ✅</h1>
     <h2> {{ variable_test }}</h2>
-    <a class="btn btn-primary" href="./">Další stránka</a>
+    <a class="btn btn-primary" href="{{ path('app_home') }}">Domovská stránka</a>
 </div>
 {% endblock %}

@@ -27,11 +27,6 @@ class HomeController extends AbstractController
             $type = $product->getProductType();
             foreach ($productTypes as $productType) 
             {
-                /*
-                dump($productType->getId());
-                dump($type->getId());
-                dump($product->getType()->getId());
-                die();*/
                 if ($type->getId() == $productType->getId()) 
                 {
                     $product->setProductType($productType);
@@ -46,7 +41,7 @@ class HomeController extends AbstractController
         ]);
     }
 
-    #[Route('/info', name: 'app_home')] //Cesta s názvem -> '/info'  // Název pro cestu kontroler 'app_home'
+    #[Route('/info', name: 'app_info')] //Cesta s názvem -> '/info'  // Název pro cestu kontroler 'app_home'
     public function info(): Response //Název metody
     {
         return $this->render('home/info.html.twig', [ //Cesta jakopu stránku má kontroler vykreslit
