@@ -1,0 +1,33 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello HomeController!{% endblock %}
+
+{% block body %}
+<style>
+    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
+    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
+</style>
+<br>
+<div class="row justify-content-center">
+  <div class="col-auto">
+    <table class="table table-bordered">
+    <thead>
+      <tr>
+        <th scope="col">Id</th>
+        <th scope="col">Name</th>
+        <th scope="col">Type</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <th scope="row"> {{ product.getId() }} </th> 
+        <td> {{ product.getName() }} </td>
+        <td> {{ product.getProductType().getName() }}</td>
+      </tr>
+    </tbody>
+    </table>
+    <br>
+    <button class="btn btn-primary" onclick="window.history.back();">Go Back</button>
+  </div>
+</div>
+{% endblock %}
