@@ -10,6 +10,10 @@ use App\Entity\Product; //Přidáno pro práci s entitou "Product"
 use App\Entity\ProductType; //Přidáno pro práci s entitou "ProductType"
 use App\Form\ProductFormType; //Přidá definici formuláře pro entitu "Product" 
 use Symfony\Component\HttpFoundation\Request; //Přidáno pro zpracování dat po provedení odeslání
+use BabDev\PagerfantaBundle\Doctrine\ORM\DoctrineORMAdapter;
+use Pagerfanta\Doctrine\ORM\QueryAdapter;
+use Pagerfanta\Pagerfanta;
+
 
 class HomeController extends AbstractController
 {
@@ -23,6 +27,7 @@ class HomeController extends AbstractController
         ]);
     }
 
+    /*
     #[Route('/overview', name: 'app_overview', methods: ['GET'])] //Cesta s názvem -> '/info'  // Název pro cestu kontroler 'app_home'
     public function overview(ManagerRegistry $doctrine): Response //Název metody
     {
@@ -49,7 +54,27 @@ class HomeController extends AbstractController
            'controller_name' => 'HomeController',
            'products' => $products
        ]);
+    }*/
+
+    #[Route('/overview/{page}', name: 'app_overview', defaults: ["page" => 1])]
+    public function overview(ManagerRegistry $doctrine, int $page): Response
+    {
+        $em = $doctrine->getManager();
+        $queryBuilder = $em->getRepository(Product::class)->createQueryBuilder('p');
+        
+        $adapter = new QueryAdapter($queryBuilder);
+        $pagerfanta = new Pagerfanta($adapter);
+        $pagerfanta->setMaxPerPage(10);  // Set the number of results per page
+        $pagerfanta->setCurrentPage($page);  // Set the current page
+        //var_dump($pagerfanta);
+        
+        return $this->render('home/overview.html.twig', [
+            'controller_name' => 'HomeController',
+            'pager' => $pagerfanta
+        ]);
     }
+
+
 
     #[Route('/product/new', name: 'product_new')] //cesta 
     public function new(Request $request,ManagerRegistry $doctrine): Response

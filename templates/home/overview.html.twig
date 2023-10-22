@@ -23,7 +23,7 @@
          </tr> 
          </thead>
          <tbody>
-        {% for product in products %}
+          {% for product in pager.currentPageResults %}
          <tr>
            <td> {{product.getId()}} </td> 
            <td> {{product.getName()}} </td>
@@ -41,5 +41,7 @@
         {% endfor %}
         </tbody>
         </table>
+        {{ pagerfanta(pager, 'twitter_bootstrap4', {'routeName': 'app_overview'}) }}
+
 </div>
 {% endblock %}
