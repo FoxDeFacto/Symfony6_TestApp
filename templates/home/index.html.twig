@@ -11,7 +11,6 @@
 <div class="example-wrapper primary">
     <h1>Hello {{ controller_name }}! ✅</h1>
     <h2> {{ variable_test }}</h2>
-    <a class="btn btn-primary" href="{{ path('app_overview') }}">Přehled</a>
 </div>
 <div class="row justify-content-center">
         <div class="accordion"  style="width: 75%;" id="accordionExample">
@@ -58,6 +57,8 @@
                 </div>
             </div>
         </div>
+        <br>
+        <a class="btn btn-primary" href="{{ path('app_overview') }}">Overview</a>
     </div>
 </div>
 {% endblock %}

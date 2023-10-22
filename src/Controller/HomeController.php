@@ -10,9 +10,10 @@ use App\Entity\Product; //Přidáno pro práci s entitou "Product"
 use App\Entity\ProductType; //Přidáno pro práci s entitou "ProductType"
 use App\Form\ProductFormType; //Přidá definici formuláře pro entitu "Product" 
 use Symfony\Component\HttpFoundation\Request; //Přidáno pro zpracování dat po provedení odeslání
-use BabDev\PagerfantaBundle\Doctrine\ORM\DoctrineORMAdapter;
 use Pagerfanta\Doctrine\ORM\QueryAdapter;
 use Pagerfanta\Pagerfanta;
+use Dompdf\Dompdf;
+
 
 
 class HomeController extends AbstractController
@@ -123,7 +124,7 @@ class HomeController extends AbstractController
             
             $em = $doctrine->getManager(); // Objekt pro práci s entitami
             
-            $em->flush(); // Provedení změn vdatabázi
+            $em->flush(); // Provedení změn v databázi
             
             return $this->redirectToRoute('app_home');
         }
@@ -146,8 +147,8 @@ class HomeController extends AbstractController
         if ($this->isCsrfTokenValid('delete'.$product->getId(), $request->request->get('_token'))) 
         {
                 $em = $doctrine->getManager();
-                $em->remove($product);
-                $em->flush();
+                $em->remove($product); //Odebere záznam
+                $em->flush(); // Provedení změn v databázi
 
                 return $this->render('home/index.html.twig', [ //Cesta jakopu stránku má kontroler vykreslit
                     'controller_name' => 'HomeController',
@@ -189,6 +190,37 @@ class HomeController extends AbstractController
         return $this->render('home/product_detail.html.twig', [
             'product' => $product,
         ]);
+    }
+
+    #[Route('/print', name: 'app_print')]
+    public function printPDF(ManagerRegistry $doctrine): Response
+    {
+
+        $products = $doctrine->getManager()->getRepository(Product::class)->findLimited(1000); //Najde všechny záznamy entity
+
+        $productTypes = $doctrine->getRepository(ProductType::class)->findAll();
+
+        foreach ($products as $product) // Spojí ProductType s Product na základě cizího klíče v Product
+        {
+           $type = $product->getProductType();
+           foreach ($productTypes as $productType) 
+           {
+               if ($type->getId() == $productType->getId()) 
+               {
+                   $product->setProductType($productType);
+                   break;
+               }
+           }
+       }
+
+        $html = $this->renderView('/home/pdf_print.html.twig', ['products' => $products]); //Pošle záznamy pro vykreslení na html
+
+        $dompdf = new Dompdf(); 
+        $dompdf->loadHtml($html); //Nahraje data pro generování pdf
+        $dompdf->render(); //Vykreslí podle dat
+        $pdfOutput = $dompdf->output(); // Hotová stránka
+
+        return new Response($pdfOutput, Response::HTTP_OK, ['Content-Type' => 'application/pdf']); //Předání dat a nastavení typu
     }
 
 }
