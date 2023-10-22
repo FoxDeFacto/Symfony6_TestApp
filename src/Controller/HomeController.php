@@ -64,8 +64,8 @@ class HomeController extends AbstractController
         
         $adapter = new QueryAdapter($queryBuilder);
         $pagerfanta = new Pagerfanta($adapter);
-        $pagerfanta->setMaxPerPage(10);  // Set the number of results per page
-        $pagerfanta->setCurrentPage($page);  // Set the current page
+        $pagerfanta->setMaxPerPage(10);  // Nastaví max limit na stránku
+        $pagerfanta->setCurrentPage($page);  // Aktuální stránka
         //var_dump($pagerfanta);
         
         return $this->render('home/overview.html.twig', [
