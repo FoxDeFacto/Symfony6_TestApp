@@ -18,9 +18,11 @@
            <th>Název</th>
            <th>Type</th>
            <th>User</th>
+           {% if app.user %}
            <th>View</th>
            <th>Edit</th>
            <th>Delete</th>
+           {% endif %}
          </tr> 
          </thead>
          <tbody>
@@ -30,6 +32,7 @@
            <td> {{product.getName()}} </td>
            <td> {{product.getProductType().getName()}}</td>
            <td> {{product.getUser().getUserIdentifier()}}</td>
+           {% if app.user and app.user == product.getUser()%}
            <td>
                 <a class="btn btn-primary" href="{{ path('product_read', {'id': product.getId() }) }}">View</a>
            </td>
@@ -39,6 +42,7 @@
            <td>
                 <a class="btn btn-primary" href="{{ path('product_delete', {'id': product.getId() }) }}">Delete</a>
            </td>
+           {% endif %}
          </tr>
         {% endfor %}
         </tbody>

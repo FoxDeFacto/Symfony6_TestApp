@@ -96,7 +96,14 @@ class HomeController extends AbstractController
  
             $product = $form->getData();
 
-            $product->setUser($this->getUser());
+            $user = $this->getUser();  // Získá uživatele
+
+            if (!$user)
+            {
+                throw $this->createAccessDeniedException('You cannot create this product, if you are not registered.');
+            }
+
+            $product->setUser($user);
 
             $em = $doctrine->getManager(); // Objekt pro práci s entitami
 
@@ -118,6 +125,13 @@ class HomeController extends AbstractController
         if (!$product) {
             throw $this->createNotFoundException('No product found for id ' . $id); //Error pokud není záznam nalezen
         }
+
+                
+        if ($product->getUser() !== $this->getUser()) // Zkontroluje jestli editující je tvůrce záznamu
+        {
+            throw $this->createAccessDeniedException('You cannot edit this product.');
+        }
+
 
         $form = $this->createForm(ProductFormType::class, $product);  //Tvorba nového formuléře podle vzoru ProductFormType
         
@@ -145,6 +159,11 @@ class HomeController extends AbstractController
         if (!$product) 
         {
             throw $this->createNotFoundException('No product found for id ' . $id); //Error pokud není záznam nalezen
+        }
+
+        if ($product->getUser() !== $this->getUser()) // Zkontroluje jestli editující je tvůrce záznamu
+        {
+            throw $this->createAccessDeniedException('You cannot delete this product.');
         }
 
         if ($this->isCsrfTokenValid('delete'.$product->getId(), $request->request->get('_token'))) 
