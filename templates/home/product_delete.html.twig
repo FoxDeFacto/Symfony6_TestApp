@@ -16,6 +16,7 @@
           <th scope="col">Id</th>
           <th scope="col">Name</th>
           <th scope="col">Type</th>
+          <th scope="col">User</th>
         </tr>
       </thead>
       <tbody>
@@ -23,6 +24,7 @@
           <th scope="row"> {{ product.getId() }} </th> 
           <td> {{ product.getName() }} </td>
           <td> {{ product.getProductType().getName() }}</td>
+          <td> {{product.getUser().getUserIdentifier()}}</td>
         </tr>
       </tbody>
       </table>

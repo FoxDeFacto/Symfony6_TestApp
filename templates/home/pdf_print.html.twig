@@ -11,6 +11,7 @@
            <th>Id</th>
            <th>Název</th>
            <th>Type</th>
+           <th>User</th>
          </tr> 
          </thead>
          <tbody>
@@ -19,6 +20,7 @@
            <td> {{product.getId()}} </td> 
            <td> {{product.getName()}} </td>
            <td> {{product.getProductType().getName()}}</td>
+           <td> {{product.getUser().getUserIdentifier()}}</td>
          </tr>
         {% endfor %}
         </tbody>

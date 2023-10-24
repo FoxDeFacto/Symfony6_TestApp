@@ -8,6 +8,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Doctrine\Persistence\ManagerRegistry; //Přidáno pro manipulaci s entitami
 use App\Entity\Product; //Přidáno pro práci s entitou "Product"
 use App\Entity\ProductType; //Přidáno pro práci s entitou "ProductType"
+use App\Entity\User;
 use App\Form\ProductFormType; //Přidá definici formuláře pro entitu "Product" 
 use Symfony\Component\HttpFoundation\Request; //Přidáno pro zpracování dat po provedení odeslání
 use Pagerfanta\Doctrine\ORM\QueryAdapter;
@@ -94,6 +95,8 @@ class HomeController extends AbstractController
         {
  
             $product = $form->getData();
+
+            $product->setUser($this->getUser());
 
             $em = $doctrine->getManager(); // Objekt pro práci s entitami
 

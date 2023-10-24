@@ -4,6 +4,7 @@ namespace App\Form;
 
 use App\Entity\Product;
 use App\Entity\ProductType;
+use App\Entity\User;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -24,6 +25,12 @@ class ProductFormType extends AbstractType
                 'class' => ProductType::class,
                 'choice_label' => 'name', //Název objektu pro indetifikaci
                 'label' => 'Typ'
+            ])
+            ->add('user',  EntityType::class,  
+            [ 
+                'class' => User::class,
+                'choice_label' => 'email', //Název objektu pro indetifikaci
+                'label' => 'Uživatel'
             ]);
     }
 

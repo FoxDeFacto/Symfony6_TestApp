@@ -17,6 +17,7 @@
            <th>Id</th>
            <th>Název</th>
            <th>Type</th>
+           <th>User</th>
            <th>View</th>
            <th>Edit</th>
            <th>Delete</th>
@@ -28,6 +29,7 @@
            <td> {{product.getId()}} </td> 
            <td> {{product.getName()}} </td>
            <td> {{product.getProductType().getName()}}</td>
+           <td> {{product.getUser().getUserIdentifier()}}</td>
            <td>
                 <a class="btn btn-primary" href="{{ path('product_read', {'id': product.getId() }) }}">View</a>
            </td>
