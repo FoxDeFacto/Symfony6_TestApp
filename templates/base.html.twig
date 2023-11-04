@@ -34,10 +34,10 @@
                 <li class="nav-item">
                   <a class="nav-link" href="{{ path('app_print')}}">Print to PDF</a>
                 </li>
+                {% endif %}
                 <li class="nav-item">
                   <a class="nav-link" href="/{{ app.user ? 'logout' : 'login'}}">{{ app.user ? 'logout' : 'login'}}</a>
                 </li>
-                {% endif %}
                 <!--
                 <li class="nav-item dropdown">
                   <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
